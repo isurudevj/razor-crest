@@ -33,10 +33,22 @@ List nodes with details
     minikube node list
 ```
 
-Stop node in cluster
+Delete node in cluster
 
 minikube-m02 in bellow example is identified from output of `list` command.
 
 ```shell
-    minikube node stop minikube-m02
+    minikube node delete minikube-m02
+```
+
+Add new node in cluster
+
+```shell
+    minikube node add --worker=true
+```
+
+### SSH , SCP into boxes
+
+```shell
+    minikube ssh --node=minikube-m02
 ```
