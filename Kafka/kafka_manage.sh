@@ -1,6 +1,28 @@
 #!/bin/bash
 INPUT=$1
 
+clean() {
+  kubectl delete -f dc-kafka.yml
+  kubectl delete -f sc-kafka.yml
+  kubectl delete -f dc-zookeeper.yml
+  kubectl delete -f sc-zookeeper.yml
+}
+
+start() {
+  kubectl apply -f dc-kafka.yml
+  kubectl apply -f sc-kafka.yml
+  kubectl apply -f dc-zookeeper.yml
+  kubectl apply -f sc-zookeeper.yml
+  # TODO add a while loop to check pod status
+  kubectl port-forward service/local-kafka 29092
+}
+
+topic() {
+  TOPIC_NAME=$1
+  PARTITION_COUNT=$2
+  POD_NAME=$(kubectl get pods --selector app="local-kafka" --output jsonpath="{.items[0].metadata.name}")
+  kubectl exec "$POD_NAME" -- kafka-topics --create --topic "$TOPIC_NAME" --partitions "$PARTITION_COUNT" --bootstrap-server localhost:29092
+}
 
 ssh() {
     SERVICE_NAME=$1
@@ -19,8 +41,7 @@ logs() {
 }
 
 port_forward() {
-  SERVICE_NAME="$1"
-  kubectl port-forward service/"$SERVICE_NAME" 29092
+  kubectl port-forward service/local-kafka 29092
 }
 
 case $INPUT in
@@ -31,7 +52,16 @@ case $INPUT in
     shift; logs "$@"
     ;;
   port-forward)
-    shift; port_forward "$@"
+    shift; port_forward
+    ;;
+  clean)
+    clean
+    ;;
+  start)
+    start
+    ;;
+  topic)
+    shift; topic "$@"
     ;;
   *)
     echo "Sorry didn't understand"
