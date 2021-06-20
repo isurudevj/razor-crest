@@ -22,7 +22,12 @@ Starting minikube with multiple nodes for some firework !!!
 </table>
 
 ```shell
-    minikube start --driver=virtualbox --nodes=3 start
+    minikube start --driver=virtualbox --nodes=3
+```
+
+Start minikube with specific profile
+```shell
+    minikube start --driver=virtualbox --nodes=3 -p local-apps
 ```
 
 ### 2. Working with multiple nodes
@@ -51,4 +56,8 @@ Add new node in cluster
 
 ```shell
     minikube ssh --node=minikube-m02
+```
+
+```shell
+    minikube cp dump.txt:/tmp/dump.txt --node=node-m01
 ```
