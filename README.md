@@ -11,4 +11,5 @@
 My local setup for application software
 
 [Minikube](Minikube/README.md)<br>
-[Kafka](Kafka/README.md)
+[Kafka](Kafka/README.md)<br>
+[Mongo](Mongo/README.md)<br>
