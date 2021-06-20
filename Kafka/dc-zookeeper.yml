@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-zookeeper
+  labels:
+    app: local-zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-zookeeper
+  template:
+    metadata:
+      labels:
+        app: local-zookeeper
+    spec:
+      containers:
+        - name: local-zookeeper
+          image: confluentinc/cp-zookeeper:6.2.0
+          ports:
+            - containerPort: 32181
+          env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "32181"
+            - name: ZOOKEEPER_TICK_TIME
+              value: "2000"
+            - name: ZOOKEEPER_SYNC_LIMIT
+              value: "2"
+
