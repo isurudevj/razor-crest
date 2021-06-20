@@ -30,6 +30,11 @@ ssh() {
   minikube ssh --node="${NODE_NAME}" -p ${CLUSTER_NAME}
 }
 
+mount() {
+  echo "Mounting the directory $(basename "$1")"
+  minikube mount "$1":/app/"$(basename "$1")" -p ${CLUSTER_NAME}
+}
+
 delete_node() {
   node_name "$1"
   echo "$NODE_NAME"
@@ -47,6 +52,9 @@ ssh)
   ;;
 delete_node)
   shift; delete_node $@
+  ;;
+mount)
+  shift; mount $@
   ;;
 *)
   echo "Sorry, I don't understand"
