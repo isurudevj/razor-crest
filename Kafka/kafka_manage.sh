@@ -13,7 +13,14 @@ start() {
   kubectl apply -f sc-kafka.yml
   kubectl apply -f dc-zookeeper.yml
   kubectl apply -f sc-zookeeper.yml
-  # TODO add a while loop to check pod status
+
+  STATUS=$(kubectl get pods --selector app=local-kafka --output jsonpath="{.items[0].status.phase}")
+  while [ "$STATUS" != "Running" ]; do
+      echo "Service local-kafka is still in $STATUS status, waiting for port forward"
+      sleep 2;
+      STATUS=$(kubectl get pods --selector app=local-kafka --output jsonpath="{.items[0].status.phase}")
+  done
+
   kubectl port-forward service/local-kafka 29092
 }
 
