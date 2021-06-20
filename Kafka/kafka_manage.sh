@@ -18,12 +18,20 @@ logs() {
   kubectl logs -f "$POD_NAME"
 }
 
+port_forward() {
+  SERVICE_NAME="$1"
+  kubectl port-forward service/"$SERVICE_NAME" 29092
+}
+
 case $INPUT in
   ssh)
     shift; ssh "$@"
     ;;
   logs)
     shift; logs "$@"
+    ;;
+  port-forward)
+    shift; port_forward "$@"
     ;;
   *)
     echo "Sorry didn't understand"
