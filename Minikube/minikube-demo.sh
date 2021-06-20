@@ -35,6 +35,11 @@ mount() {
   minikube mount "$1":/app/"$(basename "$1")" -p ${CLUSTER_NAME}
 }
 
+scp() {
+  echo "Coping file $1 to /tmp/ for the ${CLUSTER_NAME}"
+  minikube cp $1 /tmp/$1 -p ${CLUSTER_NAME}
+}
+
 delete_node() {
   node_name "$1"
   echo "$NODE_NAME"
@@ -49,6 +54,9 @@ bar)
   ;;
 ssh)
   shift; ssh $@
+  ;;
+scp)
+  shift; scp $@
   ;;
 delete_node)
   shift; delete_node $@
